@@ -1,6 +1,6 @@
 # visionary.py
 
-A cmdline tool for interacting with the Google Cloud Vision API.
+A cmdline tool for interacting with the Google Cloud Vision API. Useful for large bulk jobs.
 
 ## Setup a GCP project
 
