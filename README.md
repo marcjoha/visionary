@@ -1,6 +1,6 @@
 # visionary.py
 
-A cmdline tool for interacting with the Google Cloud Vision API. Useful for large bulk jobs.
+A cmdline tool for interacting with the Google Cloud Vision API. Useful for bulk jobs.
 
 ## Setup a GCP project
 
@@ -20,8 +20,8 @@ A cmdline tool for interacting with the Google Cloud Vision API. Useful for larg
 ## Set up visionairy.py
 
 * Preferred: set up an isolated Python environment. Note: On OS X El Capitain this
-is required or else you will get dependencey issues for the package `six`.
-* Install dependencies into using `pip install -r requirements.txt`
+is required or else you will get dependency issues for the package `six`.
+* Install dependencies using `pip install -r requirements.txt`
 
 ## Examples
 
