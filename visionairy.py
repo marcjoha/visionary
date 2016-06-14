@@ -1,8 +1,6 @@
 # visionairy.py
 
 #todo: support api key in addition to default credentials
-#todo: support remote files via http
-#todo: support local files
 #todo: make multi-threaded, hence enabling 8+ images/sec
 
 import os
