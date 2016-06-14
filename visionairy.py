@@ -9,6 +9,7 @@ import os
 import time
 import sys
 import argparse
+import base64
 import json
 from oauth2client.client import GoogleCredentials
 from googleapiclient import discovery
@@ -61,25 +62,26 @@ def get_payload(uri, types, max_results):
         }
 
     # Web URIs need to be downloaded and base64 encoded
-    elif uri.startswth("http://"):
+    elif uri.startswith("http://"):
         image_raw = urllib2.urlopen(uri).read()
         image_b64 = base64.b64encode(image_raw)
 
         payload = {
             'requests': [{
-                'image':{'source': image_b64.decode('UTF-8')},
+                'image':{'content': image_b64.decode('UTF-8')},
                 'features': features
             }]
         }
 
     # Local files just needs be base64 encoded
-    elif uri.startswth("http://"):
-        image_raw = open(uri, 'rb').read()
+    else:
+        filename = os.path.join(os.path.dirname(__file__), uri)
+        image_raw = open(filename, 'rb').read()
         image_b64 = base64.b64encode(image_raw)
 
         payload = {
             'requests': [{
-                'image':{'source': image_b64.decode('UTF-8')},
+                'image':{'content': image_b64.decode('UTF-8')},
                 'features': features
             }]
         }
@@ -115,13 +117,6 @@ def main(uris, types, max_results, output):
 
             sys.exit(0)
 
-def check_uri(argument):
-    if not argument.startswith("gs://"):
-        msg = "'%s' is not a valid Cloud Storage URI" % argument
-        raise argparse.ArgumentTypeError(msg)
-
-    return argument
-
 def check_detection_type(argument):
     detection_types = [x.strip().lower() for x in argument.split(',')]
 
@@ -141,7 +136,7 @@ def check_output(argument):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Applies image recognition to images stored on Google Cloud Storage using the Google Cloud Vision API.")
-    parser.add_argument('uris', metavar='uri', type=check_uri, nargs='*', default=sys.stdin, help="one or many URIs pointing to images in Google Cloud Storage, e.g. gs://bucket/image.jpg")
+    parser.add_argument('uris', metavar='uri', nargs='*', default=sys.stdin, help="one or many URIs pointing to images in Google Cloud Storage, e.g. gs://bucket/image.jpg")
     parser.add_argument('-t', dest="detection_types", type=check_detection_type, default=DETECTION_TYPES, help="which detection type(s) to apply: %s (default: all)" % ", ".join(DETECTION_TYPES).lower())
     parser.add_argument('-m', dest="max_results", default=4, help="maximum number of results to return per detection type (default: 4)")
     parser.add_argument('-o', dest="output", type=check_output, default=False, help="write output to files in this directory, instead of stdout")

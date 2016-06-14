@@ -31,6 +31,18 @@ Read the help page:
 python visionary.py --help
 ```
 
+Apply all detection types to a local file
+
+```bash
+python visionary.py myimage.jpg
+```
+
+Apply all detection types to remote file accessible over HTTP:
+
+```bash
+python visionary.py http://www.example.com/myimage.jpg
+```
+
 Apply all detection types to an image on Cloud Storage:
 
 ```bash
@@ -43,8 +55,15 @@ Apply face detection only (see --help for all types) to an image on Cloud Storag
 python visionary.py -t face_detection gs://mybucket/myimage.jpg
 ```
 
+Bulk load images in the local directory 'input' and write output to files suffixed with
+".json" in the local directory 'output':
+
+```bash
+find input -type f | python visionary.py -o output
+```
+
 Bulk load images from Cloud Storage and write output to files suffixed with
-".json" in the local directory:
+".json" in the local directory 'output':
 
 ```bash
 gsutil ls gs://mybucket/ | python visionary.py -o .
