@@ -2,7 +2,7 @@
 
 A cmdline tool for interacting with the Google Cloud Vision API. Useful for bulk jobs.
 
-## Setup a GCP project
+## Set up a GCP project
 
 * Create a project with the [Google Cloud Console][cloud-console], and enable
   the [Vision API][vision-api].
