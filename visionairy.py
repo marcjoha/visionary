@@ -48,12 +48,41 @@ def get_vision_service():
     return discovery.build('vision', 'v1', credentials=credentials)
 
 def get_payload(uri, types, max_results):
-    payload = {
-        'requests': [{
-            'image':{'source':{'gcsImageUri': uri}},
-            'features': [{'type': t, 'maxResults': max_results} for t in types]
-        }]
-    }
+    payload = {}
+    features = [{'type': t, 'maxResults': max_results} for t in types]
+
+    # GCS URIs are supported out of the box
+    if uri.startswith("gs://"):
+        payload = {
+            'requests': [{
+                'image':{'source':{'gcsImageUri': uri}},
+                'features': features
+            }]
+        }
+
+    # Web URIs need to be downloaded and base64 encoded
+    elif uri.startswth("http://"):
+        image_raw = urllib2.urlopen(uri).read()
+        image_b64 = base64.b64encode(image_raw)
+
+        payload = {
+            'requests': [{
+                'image':{'source': image_b64.decode('UTF-8')},
+                'features': features
+            }]
+        }
+
+    # Local files just needs be base64 encoded
+    elif uri.startswth("http://"):
+        image_raw = open(uri, 'rb').read()
+        image_b64 = base64.b64encode(image_raw)
+
+        payload = {
+            'requests': [{
+                'image':{'source': image_b64.decode('UTF-8')},
+                'features': features
+            }]
+        }
 
     return payload
 
