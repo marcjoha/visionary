@@ -28,44 +28,44 @@ is required or else you will get dependency issues for the package `six`.
 Read the help page:
 
 ```bash
-python visionary.py --help
+python visionairy.py --help
 ```
 
 Apply all detection types to a local file
 
 ```bash
-python visionary.py myimage.jpg
+python visionairy.py myimage.jpg
 ```
 
 Apply all detection types to remote file accessible over HTTP:
 
 ```bash
-python visionary.py http://www.example.com/myimage.jpg
+python visionairy.py http://www.example.com/myimage.jpg
 ```
 
 Apply all detection types to an image on Cloud Storage:
 
 ```bash
-python visionary.py gs://mybucket/myimage.jpg
+python visionairy.py gs://mybucket/myimage.jpg
 ```
 
 Apply face detection only (see --help for all types) to an image on Cloud Storage:
 
 ```bash
-python visionary.py -t face_detection gs://mybucket/myimage.jpg
+python visionairy.py -t face_detection gs://mybucket/myimage.jpg
 ```
 
 Bulk load images in the local directory 'input' and write output to files suffixed with
 ".json" in the local directory 'output':
 
 ```bash
-find input -type f | python visionary.py -o output
+find input -type f | python visionairy.py -o output
 ```
 
 Bulk load images from Cloud Storage and write output to files suffixed with
 ".json" in the local directory 'output':
 
 ```bash
-gsutil ls gs://mybucket/ | python visionary.py -o .
+gsutil ls gs://mybucket/ | python visionairy.py -o .
 ```
 
