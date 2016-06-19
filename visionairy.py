@@ -61,7 +61,7 @@ def get_payload(uri, types, max_results):
         }
 
     # Web URIs need to be downloaded and base64 encoded
-    elif uri.startswith("http://"):
+    elif uri.startswith("http://") or uri.startswith("https://"):
         image_raw = urllib2.urlopen(uri).read()
         image_b64 = base64.b64encode(image_raw)
 
