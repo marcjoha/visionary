@@ -66,6 +66,6 @@ Bulk load images from Cloud Storage and write output to files suffixed with
 ".json" in the local directory 'output':
 
 ```bash
-gsutil ls gs://mybucket/ | python visionary.py -o .
+gsutil ls gs://mybucket/ | python visionary.py -o output
 ```
 
