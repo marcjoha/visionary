@@ -31,7 +31,7 @@ Read the help page:
 python visionary.py --help
 ```
 
-Apply all detection types to a local file
+Apply all detection types to a local file:
 
 ```bash
 python visionary.py myimage.jpg
