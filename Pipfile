@@ -7,6 +7,8 @@ verify_ssl = true
 
 [packages]
 google-api-python-client = "*"
+urllib2 = "*"
+urllib = "*"
 
 [requires]
 python_version = "3.7"

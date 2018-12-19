@@ -1,26 +1,25 @@
-#todo: support api key in addition to default credentials
-#todo: make multi-threaded, hence enabling 8+ images/sec
-
 import os
 import time
 import sys
 import argparse
 import base64
 import json
-import urllib2
+from urllib.request import urlopen
 from oauth2client.client import GoogleCredentials
 from googleapiclient import discovery
 from googleapiclient import errors
 
 MAX_REQ_PER_SEC = 8
-DETECTION_TYPES = ['face_detection',
-                   'image_properties',
-                   'label_detection',
-                   'landmark_detection',
-                   'logo_detection',
-                   'safe_search_detection',
-                   'text_detection',
-                   'type_unspecified']
+DETECTION_TYPES = [ 'text_detection',
+                    'document_text_detection',
+                    'face_detection',
+                    'image_properties',
+                    'label_detection',
+                    'landmark_detection',
+                    'logo_detection',
+                    'safe_search_detection',
+                    'text_detection',
+                    'type_unspecified']
 
 def rate_limit(max_per_sec):
     min_interval = 1.0 / float(max_per_sec)
@@ -29,12 +28,12 @@ def rate_limit(max_per_sec):
         last_time_called = [0.0]
 
         def rate_limited_function(*args, **kargs):
-            elapsed = time.clock() - last_time_called[0]
+            elapsed = time.process_time() - last_time_called[0]
             left_to_wait = min_interval - elapsed
             if left_to_wait > 0:
                 time.sleep(left_to_wait)
             ret = func(*args, **kargs)
-            last_time_called[0] = time.clock()
+            last_time_called[0] = time.process_time()
             return ret
 
         return rate_limited_function
@@ -60,7 +59,7 @@ def get_payload(uri, types, max_results):
 
     # Web URIs need to be downloaded and base64 encoded
     elif uri.startswith("http://") or uri.startswith("https://"):
-        image_raw = urllib2.urlopen(uri).read()
+        image_raw = urlopen(uri).read()
         image_b64 = base64.b64encode(image_raw)
 
         payload = {
@@ -100,17 +99,18 @@ def main(uris, types, max_results, output):
         try:
             response = json.dumps(request.execute(), indent=2)
             if not output:
-                print >> sys.stdout, response
+                print(response, file=sys.stdout)
             else:
                 path = os.path.join(os.path.dirname(__file__), output)
                 filename = os.path.join(path, os.path.basename(uri) + ".json")
-                print >> open(filename, 'w'), str(response)
+                with open(filename, 'w') as f:
+                    f.write(str(response))
 
-        except errors.HttpError, error:
+        except errors.HttpError as error:
             if error.resp.get("content-type", "").startswith("application/json"):
-                print >> sys.stderr, error.content
+                print(error.content, file=sys.stderr)
             else:
-                print >> sys.stderr, str(error)
+                print(str(error), file=sys.stderr)
 
             sys.exit(0)
 
